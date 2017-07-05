@@ -108,8 +108,8 @@ app.use(session({
 	saveUninitialized: true,  
 	resave: true  
 }));
-```
-Middleware for Multer
+```  
+#### Middleware for Multer
 ```bash
 var upload = multer({dest:'./uploads'});  
 ```
@@ -217,6 +217,7 @@ router.get('/add', function(req, res,next) {
   
 
 #### Create view/addpost.jade
+
 ```bash
 extends layout
 
@@ -245,7 +246,7 @@ block content
         option(value='Sagun Maharjan') Sagun Maharjan
         option(value='Sam') Sam
     input.btn.btn-default(type='submit',name='submit',value='Submit')
-    ```  
+```  
 
 
 #### POST routing for routes/posts.js:  
