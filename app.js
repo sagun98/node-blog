@@ -7,7 +7,6 @@ var bodyParser = require('body-parser');
 var session = require ('express-session');
 var multer = require ('multer');
 var upload = multer({dest:'./uploads'});  
-var moment = require ('moment');
 var expressValidator = require ('express-validator');
 var mongo = require('mongodb');
 
@@ -16,10 +15,11 @@ var db = require ('monk')('localhost/nodeblog');
 
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+var posts = require('./routes/posts');
 
 var app = express();
 
+app.locals.moment=require ('moment');
 
 //Express messages (Download this middleware from github 'Express messages')
 app.use(require('connect-flash')());
@@ -71,7 +71,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
+app.use('/posts', posts);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
