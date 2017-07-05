@@ -355,9 +355,21 @@ router.get('/add', function(req, res,next) {
 - Go to `http://ckeditor.com/download`   and choose `Standard package`.
 - Unzip the package and put it inside nodeblog/public folder
 
-####Write a script in addpost.jade to include the editor
+#### Write a script in addpost.jade to include the editor
 ```bash
 script(src='/ckeditor/ckeditor.js')
 script
   CKEDITOR.replace('body');
+```
+  
+
+## Add Category Page (routes/categories.js)  
+- Copy the routes/post.js file content to routes/categories.js
+- Change the things that needs to be changed like GET routes for the categories: 
+```bash
+router.get('/add', function(req, res,next) {
+    res.render('addcategory',{
+    'title':'Add Category'
+  });
+});
 ```
