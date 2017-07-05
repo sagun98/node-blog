@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ## Notes:  
 #### Starting the NODE BLOG SYSTEM  
 
@@ -31,7 +30,7 @@ moment
 
 ```
 
-//Requiring necessary modules
+### Requiring necessary modules
 ```bash
 var session = require ('express-session');
 var multer = require ('multer');
