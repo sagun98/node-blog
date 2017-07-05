@@ -1,13 +1,15 @@
 ## Notes:  
 #### Starting the NODE BLOG SYSTEM  
 
-Necessary modules:  
+#### Necessary modules:
+```bash  
 sudo npm -g install express  
 sudo npm -g install express-generator  
+```  
 
-Go to the project folder and run 'express blog'  
+### Go to the project folder and run 'express blog'  
 
-Dependencies needed to install in the package.json:  
+### Dependencies needed to install in the package.json:  
 ```bash
 body-parser  
 cookie-parser  
@@ -17,7 +19,7 @@ jade
 morgan  
 serve-favicon  
 ```
-Not in the package.json  
+#### Not in the package.json  
 ```bash
 mongodb  
 monk (ORM Like mongoose)  
@@ -28,7 +30,7 @@ express-session
 multer (helps in file upload)  
 moment  
 ```
-Package.json
+#### Package.json
 ```bash
  "dependencies": {
     "express": "~4.0.0",
@@ -70,7 +72,7 @@ app.use(function(req,res,next){
 });
 ```
 
-Middleware for connect-flash:  
+#### Middleware for connect-flash:  
 ```bash
 //Express messages (Download this middleware from github 'Express messages')
 app.use(require('connect-flash')());
@@ -79,7 +81,7 @@ app.use(function (req, res, next) {
   next();
 });
 ```
-Middleware for express-validator:  
+#### Middleware for express-validator:  
 ```bash
 //Express Validator (Download this middleware form github 'expressValidator middleware')
 app.use(expressValidator({
@@ -99,7 +101,7 @@ app.use(expressValidator({
   }
 }));
 ```
-Middleware for EXPRESS-SESSIONS:
+#### Middleware for EXPRESS-SESSIONS:
 ```bash
 app.use(session({  
 	secret:'secret',  
@@ -149,7 +151,7 @@ html
   db.createCollection('posts');
 ```  
 
-Example for inserting a POST:
+#### Example for inserting a POST:
 ```bash
 db.posts.insert({title:'Blog POst One',category:"Technology",author:"Sagun Maharjan",body:"This is a body",date:ISODate()});
 
@@ -164,7 +166,7 @@ var mongo = require ('mongodb');
 var db = require ('monk')('localhost/nodeblog');
 ```
 
-Get route for routes/index.js
+#### Get route for routes/index.js
 ```bash
 /*update default route to:*/
 router.get('/', function(req, res,next) {
@@ -176,7 +178,7 @@ router.get('/', function(req, res,next) {
 });
 ```
 
-View for index.jade
+#### View for index.jade
 ```bash
 extends layout
 
@@ -193,9 +195,9 @@ block content
 ```
   
 
-GET and POST Routing for POSTS   
+### GET and POST Routing for POSTS   
 
-In app.js  
+#### In app.js  
 ```bash
 //Change var users = require('./routes/users'); to :
 var posts = require('./routes/posts');
@@ -204,7 +206,7 @@ var posts = require('./routes/posts');
 app.use('/posts', posts);
 ```
 
-In routes/posts.js    
+#### In routes/posts.js    
 ```bash
 router.get('/add', function(req, res,next) {
   res.render('addpost',{
@@ -214,7 +216,7 @@ router.get('/add', function(req, res,next) {
 ```
   
 
-Create view/addpost.jade
+#### Create view/addpost.jade
 ```bash
 extends layout
 
@@ -246,9 +248,9 @@ block content
     ```  
 
 
-POST routing for routes/posts.js:  
+#### POST routing for routes/posts.js:  
   
-First include in route/posts.js:
+#### First include in route/posts.js:
 ```bash
 var multer = require ('multer');
 var upload = multer({dest:'./uploads'}); 
@@ -313,7 +315,7 @@ Then below
   
   
   ### To show the categories of database in the dropdown  
-  Now create some categories in MONGODB to test:
+  #### Now create some categories in MONGODB to test:
   ```bash
     db.categories.insert({name:'Business'});
     db.categories.insert({name:'Science'});
@@ -321,7 +323,7 @@ Then below
  ```
   
   
-  Now update GET request of routes/posts.js to :
+ #### Now update GET request of routes/posts.js to :
   ```bash
   /* GET users listing. */
 router.get('/add', function(req, res,next) {
@@ -336,7 +338,7 @@ router.get('/add', function(req, res,next) {
 });
 ```
   
-  Update the views/addpost.jade
+ #### Update the views/addpost.jade
   ```bash
     .form-group
       label Category
