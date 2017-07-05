@@ -8,18 +8,18 @@ var session = require ('express-session');
 var multer = require ('multer');
 var upload = multer({dest:'./uploads'});  
 var moment = require ('moment');
-var expressValidator = require ('express-validation');
+var expressValidator = require ('express-validator');
+var mongo = require('mongodb');
 
 var db = require ('monk')('localhost/nodeblog');
 
-// Make db accesible to our router (Middleware)
-app.use(function(req,res,next){
-    req.db = db;
-    next();
 
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+
+var app = express();
+
 
 //Express messages (Download this middleware from github 'Express messages')
 app.use(require('connect-flash')());
@@ -51,7 +51,13 @@ app.use(expressValidator({
   }
 }));
 
-var app = express();
+
+
+// Make db accesible to our router (Middleware)
+app.use(function(req,res,next){
+    req.db = db;
+    next();
+  });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

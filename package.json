@@ -13,12 +13,14 @@
     "body-parser": "~1.0.0",
     "debug": "~0.7.4",
     "jade": "~1.3.0",
-    "monk":"~1.0.1",
+    "monk":"^1.0.1",
+    "monk":"https://github.com/vccabral/monk.git",
     "connect-flash":"*",
     "express-validator":"*",
     "express-session":"*",
     "express-messages":"*",
     "multer":"*",
-    "moment":"*"
+    "moment":"*",
+    "mongodb":"*"
   }
 }
