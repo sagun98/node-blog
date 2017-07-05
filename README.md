@@ -352,9 +352,10 @@ router.get('/add', function(req, res,next) {
 ## Text Editor and Add Categories:  
   
 ### First setting up the CKEditor:  
-- 1. Go to `http://ckeditor.com/download`   and choose `Standard package`.
-- 2. Unzip the package and put it inside nodeblog/public folder
-- 3. Write a script in addpost.jade to include the editor
+- Go to `http://ckeditor.com/download`   and choose `Standard package`.
+- Unzip the package and put it inside nodeblog/public folder
+
+####Write a script in addpost.jade to include the editor
 ```bash
 script(src='/ckeditor/ckeditor.js')
 script
