@@ -88,6 +88,3 @@ Middleware for Multer
 ```bash
 var upload = multer({dest:'./uploads'});  
 ```
-=======
-## Notes:
->>>>>>> b6663f595ebb69617d4f9920cec3fda1c333c2d7
