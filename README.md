@@ -1,6 +1,12 @@
 ## Notes:  
 #### Starting the NODE BLOG SYSTEM  
 
+#### Name of DB and collection:
+```bash
+Name of DB: nodeblog
+Name of collections: posts, collections
+```
+
 #### Necessary modules:
 ```bash  
 sudo npm -g install express  
