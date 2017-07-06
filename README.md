@@ -495,3 +495,116 @@ router.get('/show/:category', function(req, res,next) {
         !=truncateText(post.body,400)
         a.more(href='/posts/show/#{post._id}') Read More
 ```
+  
+
+## Read More Single POST and COMMENT functionality: 
+- #### In routes/post.js , create a GET route for a single page READMORE
+```bash
+router.get('/show/:id', function(req, res,next) {
+  var posts = db.get('posts');
+  
+  posts.findById(req.params.id,function(err,post){
+    res.render('show',{
+    'post':post
+    });
+  });
+});
+```
+ 
+- Then create a new view file show.jade:
+```bash
+extends layout
+
+block content
+      .post
+        h1
+        p.meta Posted in 
+          a(href='/categories/show/#{post.category}') #{post.category} 
+          by #{post.author} 
+          on #{moment(post.date).format("MM-DD-YYYY")}
+        img(src='/images/#{post.mainimage}')
+        !=post.body
+        br
+        hr
+        if post.comments
+          h3 Comments
+          each comment, i in post.comments
+            .comment
+              p.comment-name #{comment.name}
+              p.comment-body #{comment.body}
+            br
+          h3 Add Comment
+          if errors
+            ul.errors
+              each error, i in errors
+                li.alert.alert-danger #{error.msg}
+      form.comment-form(method='post',action='/posts/addcomment')
+        input(name='postid',type='hidden',value='#{post._id}')
+        .form-group
+        label Name
+        input.form-control(type='text',name='name')
+        .form-group
+        label Email
+        input.form-control(type='text',name='email')
+        .form-group
+        label Body
+        input.form-control(type='text',name='body')
+      br
+      input.btn.btn-default(type='submit',name='submit',value='Add Comment')
+```
+
+### POST route for Comments section(/posts/addcomment):
+- #### Goto routes/post.js and copy the POST route as follows:
+```bash
+router.post('/addcomment',function(req, res,next) {
+  // Get Form Values
+  var name = req.body.name;
+  var email = req.body.email;
+  var body = req.body.body;
+  var postid = req.body.postid;
+  var commentdate = new Date();
+
+  //Form Validation:
+   req.checkBody('name','Name field is required').notEmpty();
+   req.checkBody('email','Email field is required but never displayed').notEmpty();
+   req.checkBody('email','Email is not formatted properly.').isEmail();
+   req.checkBody('body','Body field is required').notEmpty();
+
+   //Check errors
+   var errors = req.validationErrors();
+   if (errors){
+    var posts = db.get('posts');
+    posts.findById(postid,function(err,post){
+      res.render('addpost',{
+      "errors":errors
+      });
+    });
+   }
+   else {
+    var comment = {
+      "name": name,
+      "email":email,
+      "body":body,
+      "commentdate":commentdate
+    }
+
+    var posts = db.get('posts');
+    posts.update({
+      "_id":postid
+    },{
+      $push:{
+        "comments":comment
+      }
+    },function(err,doc){
+      if(err){
+        res.send(err);
+      }
+      else{
+        req.flash('success',"Comment Added");
+        res.location('/posts/show/'+postid);
+        res.redirect('/posts/show/'+postid);
+      }
+    });
+   }
+});
+```

@@ -5,7 +5,7 @@ var db = require ('monk')('localhost/nodeblog');
 
 
 
-/* GET users listing. */
+/* GET request for the categories. */
 router.get('/show/:category', function(req, res,next) {
   var posts = db.get('posts');
   posts.find({category:req.params.category},{},function(err,posts){
