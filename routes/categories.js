@@ -4,6 +4,19 @@ var mongo = require('mongodb');
 var db = require ('monk')('localhost/nodeblog');
 
 
+
+/* GET users listing. */
+router.get('/show/:category', function(req, res,next) {
+  var posts = db.get('posts');
+  posts.find({category:req.params.category},{},function(err,posts){
+    res.render('index',{
+    'title':req.params.category,
+    'posts':posts
+  });
+  });
+});
+
+
 /* GET users listing. */
 router.get('/add', function(req, res,next) {
   	res.render('addcategory',{
@@ -12,48 +25,30 @@ router.get('/add', function(req, res,next) {
 });
 
 
-router.post('/add',upload.single('mainimage'),function(req, res,next) {
+router.post('/add',function(req, res,next) {
   // Get Form Values
-  var title = req.body.title;
-  var category = req.body.category;
-  var body = req.body.body;
-  var author = req.body.author;
-  var date = new Date();
+  var name = req.body.name;
  
- //Check image upload 
-  if (req.file){
-  	var mainimage = req.file.filename;
-  }
-  else{
-  	var mainimage = 'noimage.jpg';
-  }
-
   //Form Validation:
-   req.checkBody('title','Title field is required').notEmpty();
-   req.checkBody('body','Body field is required').notEmpty();
+   req.checkBody('name','Title field is required').notEmpty();
 
    //Check errors
    var errors = req.validationErrors();
    if (errors){
-   	res.render('addpost',{
+   	res.render('addcategories',{
    		"errors":errors
    	});
    }
    else {
-   	var posts = db.get('posts');
+   	var posts = db.get('categories');
    	posts.insert({
-   		"title":title,
-   		"body":body,
-   		"category":category,
-   		"date":date,
-   		"author":author,
-   		"mainimage":mainimage
-   	},function(err,post){
+   		"name":name
+   		},function(err,post){
    		if(err){
    			res.send(err);
    		}
    		else {
-   			req.flash('success','Post Added');
+   			req.flash('success','Category Added');
    			res.location('/');
    			res.redirect('/');
    		}

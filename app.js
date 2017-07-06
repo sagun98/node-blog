@@ -16,6 +16,7 @@ var db = require ('monk')('localhost/nodeblog');
 
 var routes = require('./routes/index');
 var posts = require('./routes/posts');
+var categories = require('./routes/categories');
 
 var app = express();
 
@@ -52,6 +53,10 @@ app.use(expressValidator({
 }));
 
 
+app.locals.truncateText = function(text,length){
+  var truncatedText = text.substring(0,length);
+  return truncatedText;
+}
 
 // Make db accesible to our router (Middleware)
 app.use(function(req,res,next){
@@ -72,6 +77,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/posts', posts);
+app.use('/categories', categories);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {

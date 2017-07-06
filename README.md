@@ -364,12 +364,134 @@ script
   
 
 ## Add Category Page (routes/categories.js)  
-- Copy the routes/post.js file content to routes/categories.js
-- Change the things that needs to be changed like GET routes for the categories: 
+- #### Copy the routes/post.js file content to routes/categories.js
+- #### Change the things that needs to be changed like GET routes for the categories: 
 ```bash
+//routes/categories.js
+
+var express = require('express');
+var router = express.Router(); 
+var mongo = require('mongodb');
+var db = require ('monk')('localhost/nodeblog');
+
+
+/* GET users listing. */
 router.get('/add', function(req, res,next) {
     res.render('addcategory',{
     'title':'Add Category'
   });
 });
+
+
+module.exports = router;
+
+```
+- #### Make a view of addcategory.jade
+```bash
+extends layout
+
+block content
+  h1=title
+  ul.errors
+    if errors
+      each error,i in errors
+        li.alert.alert-danger #{error.msg}
+  form(method='post',action='/categories/add')
+    .form-group
+      label Name:
+      input.form-control(name='name',type='text')
+    input.btn.btn-default(type='submit',name='submit',value='Save')
+```
+
+- #### Add the routes in app.js:
+```bash
+  var categories = require('./routes/categories');
+
+  app.use('/categories', categories);
+```
+- #### Add the POST routes in routes/categories.js:  
+```bash
+
+router.post('/add',function(req, res,next) {
+  // Get Form Values
+  var name = req.body.name;
+ 
+  //Form Validation:
+   req.checkBody('name','Title field is required').notEmpty();
+
+   //Check errors
+   var errors = req.validationErrors();
+   if (errors){
+    res.render('addcategories',{
+      "errors":errors
+    });
+   }
+   else {
+    var posts = db.get('categories');
+    posts.insert({
+      "name":name
+      },function(err,post){
+      if(err){
+        res.send(err);
+      }
+      else {
+        req.flash('success','Category Added');
+        res.location('/');
+        res.redirect('/');
+      }
+    });
+   }
+});
+```
+- #### Add `!=messages()` in layout.jade and style css:
+```bash
+
+```  
+  
+  
+## Truncate Text and Categories View:
+- #### Remove all the posts first `db.posts.remove({});` in mongodb
+- In `index.jade` replace `!=post.body`   => to parse the HTML into the blog  
+  and finally to `!=truncateText(post.body,400)`  => to truncate the text
+- In app.js add:
+```bash
+app.locals.truncateText = function(text,length){
+  var truncatedText = text.substring(0,length);
+  return truncatedText;
+}
+```
+- Change the file location in routes/posts.js
+```bash
+var upload = multer({dest:'./public/images'}); 
+```
+- Add the image tag line in `index.jade`
+```bash
+        img(src='/images/#{post.mainimage}')
+        !=truncateText(post.body,400)
+```
+
+### Adding a GET route to "show individual" in routes/categories.js
+
+- #### GET route for individual posts
+```bash
+// Show route
+router.get('/show/:category', function(req, res,next) {
+  var posts = db.get('posts');
+  posts.find({category:req.params.category},{},function(err,posts){
+    res.render('index',{
+    'title':req.params.category,
+    'posts':posts
+  });
+  });
+});
+```
+- #### Change the index.jade to add the link to open individual posts:
+```bash
+  p.meta Posted in 
+          a(href='/categories/show/#{post.category}') #{post.category} 
+          by #{post.author} 
+          on #{moment(post.date).format("MM-DD-YYYY")}
+        img(src='/images/#{post.mainimage}')
+        !=truncateText(post.body,400)
+        a.more(href='/posts/show/#{post._id}') Read More
 ```
